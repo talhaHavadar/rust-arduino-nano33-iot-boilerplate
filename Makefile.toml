@@ -1,0 +1,31 @@
+
+[tasks.build]
+command = "cargo"
+args = [
+    "build"
+]
+
+[tasks.postbuild]
+command = "cargo"
+args = [
+    "objcopy",
+    "--bin",
+    "${CARGO_MAKE_PROJECT_NAME}",
+    "--",
+    "-O",
+    "binary",
+    "${CARGO_MAKE_CRATE_TARGET_DIRECTORY}/app.bin"
+]
+
+[tasks.flash]
+dependencies = [
+    #"build",
+    "postbuild"    
+]
+command = "arduino-cli"
+args = [
+    "upload",
+    "-b", "arduino:samd:nano_33_iot",
+    "-p", "/dev/cu.usbmodem14201", # TODO: change this port to appropriate one
+    "-i", "${CARGO_MAKE_CRATE_TARGET_DIRECTORY}/app.bin"
+]
