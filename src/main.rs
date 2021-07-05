@@ -40,12 +40,9 @@ const APP: () = {
         );
         tc3.start(1.hz());
         tc3.enable_interrupt();
-
-        let mut led = pins.led_sck.into_open_drain_output(&mut pins.port);
-        led.set_high().unwrap();
-
+        
         init::LateResources {
-            red_led: led,
+            red_led: pins.led_sck.into_open_drain_output(&mut pins.port),
             timer: tc3,
         }
     }
